@@ -502,6 +502,7 @@ class db_Window(QMainWindow):
         self.table_widget.setHorizontalHeaderLabels(['id', 'time', 'drawing'])
         self.table_widget.cellClicked.connect(self.cellClick)
         self.name_file = ''
+        self.flag_item = False
         self.window_db()
 
     # выходим в меню при нажатии на кнопку "Menu"
@@ -520,6 +521,7 @@ class db_Window(QMainWindow):
             for column, item in enumerate(form):
                 self.table_widget.setVerticalHeaderLabels([''] * (row + 1))
                 # добавляем данные в таблицу
+                self.flag_item = True
                 self.table_widget.setItem(row, column, QTableWidgetItem(str(item)))
         # размеры столбцов
         self.table_widget.setColumnWidth(0, 100)
@@ -531,15 +533,17 @@ class db_Window(QMainWindow):
         self.col = col
 
     def open_run(self):
-        self.cell = []
-        self.cell.append(self.table_widget.item(self.row, self.col).text())
-        self.name_file = self.cell[-1]
-        print(self.name_file)
+        if self.flag_item:
+            self.cell = []
+            self.cell.append(self.table_widget.item(self.row, self.col).text())
+            self.name_file = self.cell[-1]
+            print(self.name_file)
 
-        # открываем изображение
-        img = Image.open(self.name_file)
-        new_img = img.crop((0, 90, 1920, 900))
-        new_img.show()
+            # открываем изображение
+            img = Image.open(self.name_file)
+            new_img = img.crop((0, 90, 1920, 900))
+            new_img.show()
+        return
 
 
 if __name__ == '__main__':
